@@ -10,3 +10,4 @@ httpx
 pandas
 plotly
 wordcloud
+langchain-community
