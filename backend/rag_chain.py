@@ -1,10 +1,10 @@
 # 📁 backend/rag_chain.py – Refined Gemini Summarization Prompts
-from langchain.vectorstores import DocArrayInMemorySearch
+# from langchain.vectorstores import DocArrayInMemorySearch
+from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from backend.fetch_news import fetch_trusted_ai_news
-
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -24,12 +24,17 @@ def run_llm(prompt: str) -> str:
         print("⚠️ LLM error:", e)
         return "⚠️ Could not generate content."
 
+
+
 def create_retriever_and_articles(days: int):
     items = fetch_trusted_ai_news(limit=50, days_back=days)
     docs = [Document(page_content=f"{i.get('title', '')}\n{i.get('summary', '')}") for i in items if isinstance(i, dict)]
     splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=40)
     chunks = splitter.split_documents(docs)
-    vectordb = DocArrayInMemorySearch.from_documents(chunks, HuggingFaceEmbeddings(model_name=EMB_MODEL))
+    
+    embedder = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    vectordb = FAISS.from_documents(chunks, embedder)
+
     return vectordb.as_retriever(), items
 
 def collective_digest(items):
