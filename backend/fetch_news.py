@@ -9,7 +9,7 @@ import http.client
 import json
 from dateutil import parser as date_parser  # ✅ for fuzzy date parsing
 
-SERPER_API_KEY = "4d317cf326df40d8c842ccaf8d9bac11bc8a0f1b"  # Replace with your actual key
+SERPER_API_KEY = ""  # Replace with your actual key
 
 RSS_FEEDS = {
     "MIT Tech Review": "https://www.technologyreview.com/feed/",
