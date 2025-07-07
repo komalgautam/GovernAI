@@ -8,8 +8,14 @@ from bs4 import BeautifulSoup
 import http.client
 import json
 from dateutil import parser as date_parser  # ✅ for fuzzy date parsing
+from dotenv import load_dotenv
+import os
 
-SERPER_API_KEY = ""  # Replace with your actual key
+# ✅ Load .env
+load_dotenv()
+
+# ✅ Get SERPER API key securely
+SERPER_API_KEY = os.getenv("SERPER_API_KEY") # Replace with your actual key
 
 RSS_FEEDS = {
     "MIT Tech Review": "https://www.technologyreview.com/feed/",
