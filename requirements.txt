@@ -1,0 +1,23 @@
+# openai
+# streamlit
+# langchain
+# docarray
+# feedparser
+# wordcloud
+# matplotlib
+# pandas
+# python-dotenv
+
+streamlit 
+pandas 
+wordcloud 
+matplotlib 
+plotly
+feedparser 
+google-generativeai
+langchain 
+docarray 
+sentence-transformers 
+aiohttp 
+python-dotenv 
+certifi
