@@ -1,4 +1,3 @@
-# 📄 app.py – Final Fix with Clean Weekly Digest Formatting
 import os
 import streamlit as st
 import pandas as pd
@@ -114,7 +113,7 @@ elif mode == "Visual Insights":
         if img:
             st.image(img, caption="Top words in recent AI news")
         else:
-            st.error("❌ Word cloud generation failed.")
+            st.error("Word cloud generation failed.")
 
     with tab5:
         df_keywords = top_keywords(valid_items)
