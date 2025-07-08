@@ -7,16 +7,16 @@ import re
 
 def extract_country_mentions(items):
     df = pd.DataFrame(items)
-    df["text"] = df["title"] + " " + df["summary"]
-    countries = ["USA","China","India","UK","Germany","France","Canada","Australia"]
+    df["text"] = df.get("title", "") + " " + df.get("content", df.get("summary", ""))
+    countries = ["USA", "China", "India", "UK", "Germany", "France", "Canada", "Australia"]
     for c in countries:
         df[c] = df["text"].str.contains(c, case=False).astype(int)
     cnt = df[countries].sum().reset_index()
-    cnt.columns=["Country","Mentions"]
+    cnt.columns = ["Country", "Mentions"]
     return cnt[cnt.Mentions > 0]
 
 def generate_wordcloud(items):
-    text = " ".join(i["title"] + " " + i["summary"] for i in items)
+    text = " ".join(i.get("title", "") + " " + i.get("content", i.get("summary", "")) for i in items)
     try:
         wc = WordCloud(width=800, height=400, background_color="white").generate(text)
         buf = BytesIO()
@@ -24,7 +24,7 @@ def generate_wordcloud(items):
         buf.seek(0)
         return buf
     except Exception as e:
-        print("❌ Word cloud generation failed:", e)
+        print("Word cloud generation failed:", e)
         return None
 
 def sentiment_trend(items):
@@ -46,8 +46,7 @@ def daily_overall_trend(items):
     return px.area(daily, x="date", y="Articles", title="Total Daily Articles on Responsible AI", markers=True)
 
 def top_keywords(items, n=15):
-    text = " ".join(i["title"] + " " + i["summary"] for i in items)
+    text = " ".join(i.get("title", "") + " " + i.get("content", i.get("summary", "")) for i in items)
     tokens = re.findall(r'\b[a-zA-Z]{4,}\b', text.lower())
     keywords = Counter(tokens).most_common(n)
-    df = pd.DataFrame(keywords, columns=["Keyword", "Frequency"])
-    return px.bar(df, x="Keyword", y="Frequency", title="Top Keywords in Weekly News")
+    return pd.DataFrame(keywords, columns=["Keyword", "Frequency"])
