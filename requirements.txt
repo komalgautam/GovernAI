@@ -10,4 +10,5 @@ httpx
 pandas
 plotly
 wordcloud
-langchain-community
+langchain-community>=0.0.21
+
