@@ -1,21 +1,22 @@
-# 📁 backend/rag_chain.py – Refined Gemini Summarization Prompts
-# from langchain.vectorstores import DocArrayInMemorySearch
-from langchain_community.vectorstores import FAISS
+# 📁 backend/rag_chain.py 
+
+from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_community.embeddings import HuggingFaceEmbeddings
-#from langchain.vectorstores.faiss import FAISS
-#from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from backend.fetch_news import fetch_trusted_ai_news
+
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+from collections import Counter
 
-# Load Gemini key
+# Load environment variables
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-llm = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
 
+# Use Gemini Pro model
+llm = genai.GenerativeModel(model_name="models/gemini-2.5-pro")
 EMB_MODEL = "all-MiniLM-L6-v2"
 
 def run_llm(prompt: str) -> str:
@@ -23,26 +24,23 @@ def run_llm(prompt: str) -> str:
         response = llm.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
-        print("⚠️ LLM error:", e)
-        return "⚠️ Could not generate content."
-
-
+        print("LLM error:", e)
+        return "Could not generate content."
 
 def create_retriever_and_articles(days: int):
     items = fetch_trusted_ai_news(limit=50, days_back=days)
+    print("Source counts:", Counter(i.get("source", "Unknown") for i in items))
+
     docs = [Document(page_content=f"{i.get('title', '')}\n{i.get('summary', '')}") for i in items if isinstance(i, dict)]
     splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=40)
     chunks = splitter.split_documents(docs)
-    
-    embedder = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    vectordb = FAISS.from_documents(chunks, embedder)
-
+    vectordb = DocArrayInMemorySearch.from_documents(chunks, HuggingFaceEmbeddings(model_name=EMB_MODEL))
     return vectordb.as_retriever(), items
 
 def collective_digest(items):
     valid_items = [i for i in items if isinstance(i, dict) and 'title' in i and 'summary' in i and 'link' in i]
     if not valid_items:
-        return "⚠️ No valid headlines to summarize. Please try again later."
+        return "No valid headlines to summarize. Please try again later."
 
     content = "\n".join(f"- {i['title']}: {i['summary']}" for i in valid_items)
     prompt = (
@@ -78,7 +76,7 @@ def answer_query(question, retriever):
     try:
         docs = retriever.get_relevant_documents(question)
         if not docs:
-            return "⚠️ No relevant news articles found to answer this question."
+            return "No relevant news articles found to answer this question."
         context = "\n\n".join(d.page_content for d in docs[:5])
         prompt = (
             "Use the context below to answer the user’s question about AI ethics or policy. "
@@ -87,4 +85,4 @@ def answer_query(question, retriever):
         )
         return run_llm(prompt)
     except Exception as e:
-        return f"⚠️ Unable to answer the query due to an error: {e}"
+        return f"Unable to answer the query due to an error: {e}"
