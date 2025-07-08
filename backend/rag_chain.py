@@ -1,7 +1,9 @@
 # 📁 backend/rag_chain.py – Refined Gemini Summarization Prompts
 # from langchain.vectorstores import DocArrayInMemorySearch
-from langchain.vectorstores.faiss import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+#from langchain.vectorstores.faiss import FAISS
+#from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from backend.fetch_news import fetch_trusted_ai_news
