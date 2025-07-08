@@ -12,9 +12,9 @@ GovernAI is your real-time assistant for responsible AI updates. It helps you:
 
 - 🤖 **Ask Questions** about ethical AI developments using retrieval-augmented Gemini models.
 - 📰 **Get Weekly Digests** with collective and source-wise bullet summaries.
-- 📊 **Visualize Trends** in global mentions, sources, sentiment, and policy keywords.
+- 📊 **Visualize Trends** in global mentions, sources and policy keywords.
 
-All of this is built with a beautiful and responsive [Streamlit](https://streamlit.io) interface.
+All of this is built with a beautiful and responsive [Streamlit](https://governai-aplh5iwpiip29sxyia6c7g.streamlit.app/) interface.
 
 ---
 
@@ -63,7 +63,6 @@ GOOGLE_API_KEY=your_gemini_api_key
 
 4. Run it!
 streamlit run app.py
-📸 Screenshots
 
 
 🔧 Tech Stack
@@ -78,10 +77,11 @@ streamlit run app.py
 GovernAI is still evolving. Planned future updates include:
 
 ✅ Addition and better data sourcing from trusted sources.
-✅ Topic filtering by theme or region
+✅ Enhanced prompting and report generation.
+✅ Topic filtering by theme or region.
 ✅ Email digests & alerts
 ✅ User-authored dashboards
-✅ NLP-powered policy timeline comparison
-✅ Open Graph or LinkedIn card previews
+✅ NLP-powered policy timeline comparison.
+
 
 If you'd like to contribute, suggest new sources, or request custom use cases, feel free to open an issue or pull request.
