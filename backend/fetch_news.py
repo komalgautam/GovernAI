@@ -7,6 +7,7 @@ import http.client
 import json
 from dateutil import parser as date_parser
 from dotenv import load_dotenv
+import os
 
 # Load .env
 load_dotenv()
