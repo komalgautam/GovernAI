@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import http.client
 import json
 from dateutil import parser as date_parser
+from dotenv import load_dotenv
 
 # Load .env
 load_dotenv()
