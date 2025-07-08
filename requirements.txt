@@ -11,4 +11,5 @@ pandas
 plotly
 wordcloud
 langchain-community>=0.0.21
+sentence-transformers
 
